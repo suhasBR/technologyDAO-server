@@ -16,7 +16,7 @@ app.use('/api/v1/questions',questions);
 
 const start = async () => {
     try{
-        await connectDB(process.env.MONGO_URI);
+        await connectDB("mongodb+srv://suhasbr:orQApynvmxPTe6u0@projectmvp.iz6x5c1.mongodb.net/web3qna?retryWrites=true&w=majority");
         app.listen(port, () => {
             console.log(`Server is listening to port ${port}`);
         });
