@@ -5,15 +5,21 @@
   "main": "index.js",
   "scripts": {
     "start": "node app",
-    "dev":"nodemon --exec npm start"
+    "dev": "nodemon --exec npm start"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "config": "^3.3.7",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
-    "mongoose": "^6.4.6"
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.4.6",
+    "nodemailer": "^6.7.7",
+    "openai": "^3.0.0",
+    "randomstring": "^1.2.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.19"
