@@ -5,7 +5,7 @@ const {
   registerUser,
   getUser,
   loginUser,
-  emailVerify
+  emailVerify,
 } = require("../controllers/user");
 
 

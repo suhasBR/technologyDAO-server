@@ -23,8 +23,10 @@ const registerUser = async (req, res) => {
 
     const currReferrals = referredUser.referrals;
 
-    if (currReferrals == 2) {
-      return res.status(400).json({ msg: "Referral Limit reached" });
+    if (referralID !== "RnTnoL"){
+      if (currReferrals == 2) {
+        return res.status(400).json({ msg: "Referral Limit reached" });
+      }
     }
 
     //generate referral code
@@ -66,8 +68,8 @@ const registerUser = async (req, res) => {
       //update user
       const updatedUser = await User.findOneAndUpdate(
         { referralCode: referralID },
-        {referrals: currReferrals + 1},
-        {new: true}
+        { referrals: currReferrals + 1 },
+        { new: true }
       );
 
       jwt.sign(
@@ -76,7 +78,7 @@ const registerUser = async (req, res) => {
         { expiresIn: 3600 },
         (err, token) => {
           if (err) throw err;
-          
+
           res.json({ token });
         }
       );
@@ -144,7 +146,7 @@ const emailVerify = async (req, res) => {
     if (user) {
       const user_updated = await User.findOneAndUpdate(
         { verificationCode: code },
-        {verified: true},
+        { verified: true },
         { new: true }
       );
       res.status(200).send(`Verification successful for ${user_updated.email}`);
@@ -161,7 +163,7 @@ const sendEmail = (email_addr, data) => {
     service: "gmail",
     auth: {
       user: "techdaosanjay@gmail.com",
-      pass: 'uumlalwyyxxqnnyc',
+      pass: "uumlalwyyxxqnnyc",
     },
   });
 
@@ -179,7 +181,7 @@ const sendEmail = (email_addr, data) => {
 
     console.log(JSON.stringify(result, null, 4));
   }
-}
+};
 
 module.exports = {
   registerUser,
