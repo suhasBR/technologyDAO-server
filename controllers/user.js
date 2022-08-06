@@ -176,7 +176,7 @@ const sendEmail = (email_addr, data) => {
       subject: "Email Verification for Technology DAO",
       text: `Dear User,
       Click the following link to verify your email
-      https://technologydao.herokuapp.com/api/v1/users/verify/${data}`,
+      http://localhost:5000/api/v1/users/verify/${data}`,
     });
 
     console.log(JSON.stringify(result, null, 4));

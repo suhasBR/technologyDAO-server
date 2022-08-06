@@ -4,6 +4,7 @@ require('dotenv').config();
 const cors = require('cors')
 const users = require("./routes/user");
 const write = require("./routes/write");
+const articles = require("./routes/articles");
 
 const connectDB = require("./db/connect");
 
@@ -15,6 +16,7 @@ app.use(cors());
 
 app.use('/api/v1/users',users);
 app.use('/api/v1/write',write);
+app.use('/api/v1/articles',articles);
 
 const start = async () => {
     try{
