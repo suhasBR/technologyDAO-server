@@ -17,7 +17,7 @@ const createArticle = authWrapper(async (req, res) => {
       author: req.user.id,
       authorEmail: req.user.email
     };
-    console.log(article);
+    console.log(article, req.user);
     let newArticle = await Article.create(article);
     res.status(201).json({ newArticle });
   } catch (error) {
