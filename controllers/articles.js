@@ -7,7 +7,7 @@ const sanitize = require("mongo-sanitize");
 const createArticle = authWrapper(async (req, res) => {
   try {
     req.body = sanitize(req.body);
-    const { title, description, content, forkedFrom, wordCount } = req.body;
+    const { title, description, authorEmail, content, forkedFrom, wordCount } = req.body;
     const article = {
       title,
       description,
@@ -15,7 +15,7 @@ const createArticle = authWrapper(async (req, res) => {
       forkedFrom,
       wordCount,
       author: req.user.id,
-      authorEmail: req.user.email
+      authorEmail
     };
     console.log(article, req.user);
     let newArticle = await Article.create(article);
