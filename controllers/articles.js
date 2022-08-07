@@ -15,6 +15,7 @@ const createArticle = authWrapper(async (req, res) => {
       forkedFrom,
       wordCount,
       author: req.user.id,
+      authorEmail: req.user.email
     };
     let newArticle = await Article.create(article);
     res.status(201).json({ newArticle });

@@ -11,6 +11,10 @@ const ArticleSchema = new mongoose.Schema(
             ref: 'User',
             required: true
         },
+        authorEmail:{
+            type: String,
+            required: true
+        },
         forkedFrom:{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Article'
