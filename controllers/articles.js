@@ -49,7 +49,7 @@ const getArticlesByOwner = authWrapper(async (req, res) => {
     const userID = req.user.id;
 
     //get article corresponding to the userId
-    const articles = await Article.find({ author: userID });
+    const articles = await Article.find({ author: userID }).sort({createdAt:-1});;
     res.status(201).json({ articles });
   } catch (error) {
     console.error(error.message);
