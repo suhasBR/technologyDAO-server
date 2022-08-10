@@ -23,11 +23,11 @@ const registerUser = async (req, res) => {
 
     const currReferrals = referredUser.referrals;
 
-    if (referralID !== "RnTnoL"){
-      if (currReferrals == 2) {
-        return res.status(400).json({ msg: "Referral Limit reached" });
-      }
-    }
+    // if (referralID !== "RnTnoL"){
+    //   if (currReferrals == 2) {
+    //     return res.status(400).json({ msg: "Referral Limit reached" });
+    //   }
+    // }
 
     //generate referral code
     const ref1 = randomstring.generate({
