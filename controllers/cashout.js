@@ -40,7 +40,7 @@ const send_tokens = async (toAddress, amount) => {
 
 
   //convert amount MATIC to WEI
-  amount = parseInt(amount);
+  amount = parseFloat(amount);
   amount = amount * 10**18;
   amount = amount.toString();
 
