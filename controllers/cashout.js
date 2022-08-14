@@ -35,10 +35,9 @@ const cashout = authWrapper(async (req, res) => {
 
 const send_tokens = async (toAddress, amount) => {
   const provider = new ethers.providers.JsonRpcProvider(
-    process.env.MONGO_URI
+    process.env.OAI
   );
   const privateKey = process.env.PK;
-  console.log(privateKey)
 
   //convert amount MATIC to WEI
   amount = parseInt(amount);
