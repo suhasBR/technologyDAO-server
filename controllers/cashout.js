@@ -39,6 +39,8 @@ const send_tokens = async (toAddress, amount) => {
   );
   const privateKey = process.env.PK;
 
+  console.log(process.env.OAI, process.env.PK);
+
   //convert amount MATIC to WEI
   amount = parseInt(amount);
   amount = amount * 10**18;
