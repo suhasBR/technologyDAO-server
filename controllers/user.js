@@ -6,8 +6,10 @@ const jwt = require("jsonwebtoken");
 const authWrapper = require("../middleware/auth");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
+const sanitize = require("mongo-sanitize");
 
 const registerUser = async (req, res) => {
+  req.body = sanitize(req.body);
   let { email, password, referralID } = req.body;
 
   try {
@@ -100,6 +102,7 @@ const getUser = authWrapper(async (req, res) => {
 });
 
 const loginUser = async (req, res) => {
+  req.body = sanitize(req.body);
   const { email, password } = req.body;
 
   try {

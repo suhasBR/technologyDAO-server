@@ -1,3 +1,4 @@
+const sanitize = require("mongo-sanitize");
 const { Configuration, OpenAIApi } = require("openai");
 const authWrapper = require("../middleware/auth");
 const User = require("../models/User");
@@ -13,7 +14,7 @@ const genSuggestion = authWrapper(async (req, res) => {
   } = req.body;
 
   const configuration = new Configuration({
-    apiKey: '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',
+    apiKey: process.env.OAI,
   });
   const openai = new OpenAIApi(configuration);
 
@@ -32,6 +33,8 @@ const genSuggestion = authWrapper(async (req, res) => {
   const tokensGenerated = received_data.length / 4;
 
   try {
+
+    req.user = sanitize(req.user);
 
     const user = await User.findOne({ _id: req.user.id });
 
