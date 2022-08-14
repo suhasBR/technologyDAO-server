@@ -35,11 +35,10 @@ const cashout = authWrapper(async (req, res) => {
 
 const send_tokens = async (toAddress, amount) => {
   const provider = new ethers.providers.JsonRpcProvider(
-    process.env.OAI
+    'https://polygon-mumbai.g.alchemy.com/v2/_3DgKNfvnhhSYlVLzGn9iig_F9PnOW4'
   );
   const privateKey = process.env.PK;
 
-  console.log(process.env.OAI, process.env.PK);
 
   //convert amount MATIC to WEI
   amount = parseInt(amount);
