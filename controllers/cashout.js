@@ -17,7 +17,8 @@ const cashout = authWrapper(async (req, res) => {
         .json({ msg: "Cannot withdraw more than total balance" });
     }
 
-    const res = await send_tokens(address, amount);
+    const resp = await send_tokens(address, amount);
+    console.log(`Transferred ${amount} tokens successfully to ${address}`)
     let finalTokens = currTokens - amount;
 
     const updatedUser = await User.findOneAndUpdate(
@@ -25,8 +26,8 @@ const cashout = authWrapper(async (req, res) => {
       { tokens: finalTokens },
       { new: true }
     );
-
-    return res.status(200).json(user);
+  
+    res.status(201).json({updatedUser});
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ msg: "Server Error" });
@@ -34,24 +35,22 @@ const cashout = authWrapper(async (req, res) => {
 });
 
 const send_tokens = async (toAddress, amount) => {
-  const provider = new ethers.providers.JsonRpcProvider(
-    'https://polygon-mumbai.g.alchemy.com/v2/_3DgKNfvnhhSYlVLzGn9iig_F9PnOW4'
-  );
+  const provider = new ethers.providers.JsonRpcProvider(process.env.ALCHEMY);
   const privateKey = process.env.PK;
 
 
   //convert amount MATIC to WEI
   amount = parseInt(amount);
   amount = amount * 10**18;
+  amount = amount.toString();
 
-  const feeData = await provider.getFeeData();
+//   const feeData = await provider.getFeeData();
 //   console.log("feeData :" + feeData);
 
   const signer = new ethers.Wallet(privateKey, provider);
-  const address = "0xB1F2411BAf6e9E0227077A8f8ec9CccDc79512C5";
+  const address = "0x81B8e22e7fc09Af376d7CF7AAB288c5a22b18F07";
 
-  const myContract_write = new ethers.Contract(address, myAbi.abi, signer);
-  console.log('done')
+  const myContract_write = new ethers.Contract(address, myAbi, signer);
 
   try {
     let result = await myContract_write.mint(toAddress, amount);
