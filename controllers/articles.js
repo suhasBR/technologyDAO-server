@@ -39,7 +39,7 @@ const createArticle = authWrapper(async (req, res) => {
     if (articlesPublished.length >= 3) {
       return res
         .status(400)
-        .json({ msg: "Article publishing limit for the day has reached" });
+        .json({ msg: "Article publishing limit for the day has reached, Upgrade to PRO for publishing more" });
     }
 
     //publish article on IPFS and store the link
@@ -427,7 +427,7 @@ const getArticlesById = async (req, res) => {
 const getAllArticles = async (req, res) => {
   try {
     const articles = await Article.find({ published: true }).sort({
-      createdAt: -1,
+      boostAmount: -1,
     });
     res.status(201).json({ articles });
   } catch (error) {

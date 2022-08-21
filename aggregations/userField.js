@@ -30,7 +30,7 @@ async function main() {
       [
         {
           '$addFields': {
-            'cidURL': ''
+            'tokens': 0
           }
         }
       ],
