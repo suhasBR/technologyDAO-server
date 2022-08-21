@@ -3,6 +3,7 @@ const { Configuration, OpenAIApi } = require("openai");
 const authWrapper = require("../middleware/auth");
 const User = require("../models/User");
 
+//
 const genSuggestion = authWrapper(async (req, res) => {
   const {
     prompt,
@@ -38,19 +39,19 @@ const genSuggestion = authWrapper(async (req, res) => {
 
     const user = await User.findOne({ _id: req.user.id });
 
-    let currTokens = user.tokens;
+    let currPoints = user.aiPoints;
 
-    let finalTokens = currTokens + tokensGenerated;
+    let finalPoints = currPoints + tokensGenerated;
     
     const updatedUser = await User.findOneAndUpdate(
       { _id: req.user.id },
-      { tokens: finalTokens },
+      { aiPoints: finalPoints },
       { new: true }
     );
 
     res.status(200).json({
       data: response1.data.choices[0].text,
-      tokens: updatedUser.tokens,
+      aiPoints: updatedUser.aiPoints,
     });
   } catch (error) {
     console.error(err.message);

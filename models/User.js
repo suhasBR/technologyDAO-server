@@ -21,6 +21,16 @@ const UserSchema = new mongoose.Schema(
       type: Number,
       default:0,
     },
+    aiPoints:{
+      type: Number,
+      default:0
+    },
+    upvotesLeft:{
+      type: Number,
+      default: 10,
+      min:0,
+      max:10
+    },
     verified:{
       type: Boolean,
       default: false

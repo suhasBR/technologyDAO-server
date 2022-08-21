@@ -111,11 +111,27 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ msg: "User does not exist!" });
     }
 
+
+
     //compare password for validation
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
       return res.status(400).json({ msg: "Invalid credentials" });
+    }
+
+    //refresh upvotes
+    const lastUpdated = new Date(user.updatedAt);
+    const currDateUNIX = new Date();
+    let currDate = currDateUNIX.toISOString();
+
+    if(currDate > lastUpdated){
+      console.log('refreshing upvotes..')
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: req.user.id },
+        { upvotesLeft : 10 },
+        { new: true }
+      );
     }
 
     //return jsonwebtoken

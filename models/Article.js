@@ -29,6 +29,26 @@ const ArticleSchema = new mongoose.Schema(
         wordCount:{
             type: Number,
             required:true
+        },
+        published: {
+            type: Boolean,
+            required: true,
+        },
+        upvotes:{
+            type: Number,
+            default: 0
+        },
+        boostAmount:{
+            type:Number,
+            default:0
+        },
+        boostUntil:{
+            type: Date,
+            default: null
+        },
+        cidURL:{
+            type:String,
+            default:null
         }
 }, { timestamps: true });
 
