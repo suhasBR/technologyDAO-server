@@ -426,8 +426,10 @@ const getArticlesById = async (req, res) => {
 //{{localhost}}/api/v1/articles/getAllArticles
 const getAllArticles = async (req, res) => {
   try {
-    const articles = await Article.find({ published: true }).sort({
+    const articles = await Article.find({ published: true }).select('authorEmail boostAmount boostUntil content createdAt title').sort({
       boostAmount: -1,
+      boostUntil: 1,
+      updatedAt:-1,
     });
     res.status(201).json({ articles });
   } catch (error) {
