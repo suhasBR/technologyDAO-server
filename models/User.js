@@ -42,6 +42,10 @@ const UserSchema = new mongoose.Schema(
     verificationCode :{
       type: Number,
       unique: true,
+    },
+    memberType:{
+      type: String,
+      default: 'basic'
     }
   },
   { timestamps: true }

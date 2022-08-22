@@ -30,7 +30,7 @@ async function main() {
       [
         {
           '$addFields': {
-            'tokens': 0
+            'memberType': 'basic'
           }
         }
       ],

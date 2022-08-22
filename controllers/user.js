@@ -195,16 +195,41 @@ const sendEmail = (email_addr, data) => {
       subject: "Email Verification for Technology DAO",
       text: `Dear User,
       Click the following link to verify your email
-      http://localhost:5000/api/v1/users/verify/${data}`,
+      https://technologydao.herokuapp.com/api/v1/users/verify/${data}`,
     });
 
     console.log(JSON.stringify(result, null, 4));
   }
 };
 
+const upgradeToPro = authWrapper(async(req,res) => {
+  try {
+    req.user = sanitize(req.user);
+    const user = await User.findOne({_id:req.user.id});
+    if(user.memberType === 'pro'){
+      return res.status(400).json({ msg: "Already Pro user" });
+    }
+    if(user.tokens < 1000){
+      return res.status(400).json({ msg: "Not Enough token balance" });
+    }
+    //update user by subtracting 1000 tokens
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: req.user.id },
+      { $inc: {tokens: -1000}, memberType: 'pro' },
+      { new: true }
+    );
+  
+    res.status(201).json({updatedUser});
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ msg: "Server Error" });
+  }
+})
+
 module.exports = {
   registerUser,
   getUser,
   loginUser,
   emailVerify,
+  upgradeToPro
 };
