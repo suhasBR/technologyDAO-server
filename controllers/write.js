@@ -14,10 +14,14 @@ const genSuggestion = authWrapper(async (req, res) => {
     presence_penalty,
   } = req.body;
 
+  console.log('initially');
+
   const configuration = new Configuration({
     apiKey: process.env.OAI,
   });
   const openai = new OpenAIApi(configuration);
+
+  console.log('testing2')
 
   const response1 = await openai.createCompletion({
     model: "text-curie-001",
@@ -29,7 +33,11 @@ const genSuggestion = authWrapper(async (req, res) => {
     presence_penalty,
   });
 
+  console.log(response1);
+
   const received_data = response1.data.choices[0].text;
+
+  console.log(received_data);
 
   const tokensGenerated = received_data.length / 4;
 
