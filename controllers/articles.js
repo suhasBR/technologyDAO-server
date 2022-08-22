@@ -292,7 +292,7 @@ const updateArticle = authWrapper(async (req, res) => {
     let currTokens = 0;
     let finalTokens = 0;
     currTokens = user.tokens;
-    finalTokens = currTokens + 0.05 * wordCount - prevWordCount;
+    finalTokens = currTokens + 0.05 * (wordCount - prevWordCount);
 
     const updatedUser = await User.findOneAndUpdate(
       { _id: req.user.id },
