@@ -48,7 +48,7 @@ const send_tokens = async (toAddress, amount) => {
 //   console.log("feeData :" + feeData);
 
   const signer = new ethers.Wallet(privateKey, provider);
-  const address = "0x81B8e22e7fc09Af376d7CF7AAB288c5a22b18F07";
+  const address = "0xdC8f315456d8a64D2bB4F611cB451C78c309B60B";
 
   const myContract_write = new ethers.Contract(address, myAbi, signer);
 

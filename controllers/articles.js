@@ -2,9 +2,9 @@ const User = require("../models/User");
 const Article = require("../models/Article");
 const authWrapper = require("../middleware/auth");
 const sanitize = require("mongo-sanitize");
-const fs = require('fs');
-const {makeStorageClient} = require("../ipfs/ipfs")
-const {File} = require('web3.storage')
+const fs = require("fs");
+const { makeStorageClient } = require("../ipfs/ipfs");
+const { File } = require("web3.storage");
 
 //{{localhost}}/api/v1/articles/create
 const createArticle = authWrapper(async (req, res) => {
@@ -36,10 +36,12 @@ const createArticle = authWrapper(async (req, res) => {
     });
     console.log(articlesPublished.length);
 
-    if (articlesPublished.length >= 3) {
-      return res
-        .status(400)
-        .json({ msg: "Article publishing limit for the day has reached, Upgrade to PRO for publishing more" });
+    if (user.memberType === "basic") {
+      if (articlesPublished.length >= 3) {
+        return res.status(400).json({
+          msg: "Article publishing limit for the day has reached, Upgrade to PRO for publishing more",
+        });
+      }
     }
 
     //publish article on IPFS and store the link
@@ -52,7 +54,7 @@ const createArticle = authWrapper(async (req, res) => {
     const toWrite = JSON.stringify(obj);
     const buffer = Buffer.from(JSON.stringify(obj));
 
-    const files = [new File([buffer],`${title}.json`)]
+    const files = [new File([buffer], `${title}.json`)];
     const client = makeStorageClient();
     const cid = await client.put(files);
     // let cidURL = "https://ipfs.io/ipfs/" + cid;
@@ -81,10 +83,10 @@ const createArticle = authWrapper(async (req, res) => {
       const forkedArticle = await Article.findOne({ _id: forkedFrom });
       const previouswordCount = forkedArticle.wordCount;
       currTokens = user.tokens;
-      finalTokens = currTokens + 0.05*wordCount - previouswordCount;
+      finalTokens = currTokens + 0.05 * wordCount - previouswordCount;
     } else {
       currTokens = user.tokens;
-      finalTokens = currTokens + 0.05*wordCount;
+      finalTokens = currTokens + 0.05 * wordCount;
     }
     //normalize rewards
     finalTokens = 1 + finalTokens;
@@ -140,7 +142,7 @@ const createArticlePaid = authWrapper(async (req, res) => {
     const toWrite = JSON.stringify(obj);
     const buffer = Buffer.from(JSON.stringify(obj));
 
-    const files = [new File([buffer],`${title}.json`)]
+    const files = [new File([buffer], `${title}.json`)];
     const client = makeStorageClient();
     const cid = await client.put(files);
     // let cidURL = "https://ipfs.io/ipfs/" + cid;
@@ -169,10 +171,10 @@ const createArticlePaid = authWrapper(async (req, res) => {
       const forkedArticle = await Article.findOne({ _id: forkedFrom });
       const previouswordCount = forkedArticle.wordCount;
       currTokens = user.tokens;
-      finalTokens = currTokens + 0.05*wordCount - previouswordCount;
+      finalTokens = currTokens + 0.05 * wordCount - previouswordCount;
     } else {
       currTokens = user.tokens;
-      finalTokens = currTokens + 0.05*wordCount;
+      finalTokens = currTokens + 0.05 * wordCount;
     }
     //normalize rewards
     finalTokens = 1 + finalTokens;
@@ -216,6 +218,12 @@ const boostArticle = authWrapper(async (req, res) => {
       { new: true }
     );
 
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: req.user.id },
+      { $inc: { tokens: -boostAmount } },
+      { new: true }
+    );
+
     res.status(201).json({ updatedArticle });
   } catch (error) {
     console.error(error.message);
@@ -245,10 +253,14 @@ const updateArticle = authWrapper(async (req, res) => {
     const currState = await Article.findOne({ _id: id });
     const prevWordCount = currState.wordCount;
 
-    if (articlesPublished.length >= 3) {
-      return res
-        .status(400)
-        .json({ msg: "Article publishing limit for the day has reached" });
+    const user = await User.findOne({ _id: req.user.id });
+
+    if (user.memberType === "basic") {
+      if (articlesPublished.length >= 3) {
+        return res
+          .status(400)
+          .json({ msg: "Article publishing limit for the day has reached" });
+      }
     }
 
     const article = await Article.findOne({ _id: id });
@@ -263,7 +275,7 @@ const updateArticle = authWrapper(async (req, res) => {
     const toWrite = JSON.stringify(obj);
     const buffer = Buffer.from(JSON.stringify(obj));
 
-    const files = [new File([buffer],`${title}.json`)]
+    const files = [new File([buffer], `${title}.json`)];
     const client = makeStorageClient();
     const cid = await client.put(files);
     // let cidURL = "https://ipfs.io/ipfs/" + cid;
@@ -280,7 +292,7 @@ const updateArticle = authWrapper(async (req, res) => {
     let currTokens = 0;
     let finalTokens = 0;
     currTokens = user.tokens;
-    finalTokens = currTokens + 0.05*wordCount - prevWordCount;
+    finalTokens = currTokens + 0.05 * wordCount - prevWordCount;
 
     const updatedUser = await User.findOneAndUpdate(
       { _id: req.user.id },
@@ -330,7 +342,7 @@ const updateArticlePaid = authWrapper(async (req, res) => {
     const toWrite = JSON.stringify(obj);
     const buffer = Buffer.from(JSON.stringify(obj));
 
-    const files = [new File([buffer],`${title}.json`)]
+    const files = [new File([buffer], `${title}.json`)];
     const client = makeStorageClient();
     const cid = await client.put(files);
     // let cidURL = "https://ipfs.io/ipfs/" + cid;
@@ -347,8 +359,7 @@ const updateArticlePaid = authWrapper(async (req, res) => {
     let currTokens = 0;
     let finalTokens = 0;
     currTokens = user.tokens;
-    finalTokens = currTokens + 0.05*wordCount - prevWordCount;
-
+    finalTokens = currTokens + 0.05 * wordCount - prevWordCount;
 
     const updatedUser = await User.findOneAndUpdate(
       { _id: req.user.id },
@@ -426,11 +437,13 @@ const getArticlesById = async (req, res) => {
 //{{localhost}}/api/v1/articles/getAllArticles
 const getAllArticles = async (req, res) => {
   try {
-    const articles = await Article.find({ published: true }).select('authorEmail boostAmount boostUntil content createdAt title').sort({
-      boostAmount: -1,
-      boostUntil: 1,
-      updatedAt:-1,
-    });
+    const articles = await Article.find({ published: true })
+      .select("authorEmail boostAmount boostUntil content createdAt title")
+      .sort({
+        boostAmount: -1,
+        boostUntil: -1,
+        updatedAt: -1,
+      });
     res.status(201).json({ articles });
   } catch (error) {
     console.error(error.message);

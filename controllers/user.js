@@ -124,6 +124,7 @@ const loginUser = async (req, res) => {
     const lastUpdated = new Date(user.updatedAt);
     const currDateUNIX = new Date();
     let currDate = currDateUNIX.toISOString();
+    console.log(currDate,lastUpdated,currDate>lastUpdated)
 
     if(currDate > lastUpdated){
       console.log('refreshing upvotes..')
