@@ -270,7 +270,7 @@ const updateArticle = authWrapper(async (req, res) => {
       authorEmail: article.authorEmail,
       title: article.title,
       content,
-      forkedFrom: author.forkedFrom,
+      forkedFrom: article.forkedFrom,
     };
     const toWrite = JSON.stringify(obj);
     const buffer = Buffer.from(JSON.stringify(obj));
