@@ -251,7 +251,11 @@ const updateArticle = authWrapper(async (req, res) => {
 
     //get current article details
     const currState = await Article.findOne({ _id: id });
-    const prevWordCount = currState.wordCount;
+    let prevWordCount=0;
+    if(currState.published){
+      const prevWordCount = currState.wordCount;
+    }
+    
 
     const user = await User.findOne({ _id: req.user.id });
 
@@ -293,6 +297,7 @@ const updateArticle = authWrapper(async (req, res) => {
     let finalTokens = 0;
     currTokens = user.tokens;
     finalTokens = currTokens + 0.05 * (wordCount - prevWordCount);
+    console.log(finalTokens,prevWordCount);
 
     const updatedUser = await User.findOneAndUpdate(
       { _id: req.user.id },

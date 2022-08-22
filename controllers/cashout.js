@@ -35,6 +35,7 @@ const cashout = authWrapper(async (req, res) => {
 });
 
 const send_tokens = async (toAddress, amount) => {
+  console.log(amount);
   const provider = new ethers.providers.JsonRpcProvider(process.env.ALCHEMY);
   const privateKey = process.env.PK;
 
@@ -48,7 +49,8 @@ const send_tokens = async (toAddress, amount) => {
 //   console.log("feeData :" + feeData);
 
   const signer = new ethers.Wallet(privateKey, provider);
-  const address = "0xdC8f315456d8a64D2bB4F611cB451C78c309B60B";
+  const address = "0xA26261e6EB882bcd24eF164e6D066131972C1716";
+  
 
   const myContract_write = new ethers.Contract(address, myAbi, signer);
 
