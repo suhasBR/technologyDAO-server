@@ -91,11 +91,15 @@ const createArticle = authWrapper(async (req, res) => {
     //normalize rewards
     finalTokens = 1 + finalTokens;
 
-    const updatedUser = await User.findOneAndUpdate(
-      { _id: req.user.id },
-      { tokens: finalTokens },
-      { new: true }
-    );
+    //update finalTokens only if article is published
+
+    if(article.published){
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: req.user.id },
+        { tokens: finalTokens },
+        { new: true }
+      );
+    }
 
     res.status(201).json({ newArticle });
   } catch (error) {
@@ -293,6 +297,7 @@ const updateArticle = authWrapper(async (req, res) => {
 
     //reward for additional words
     if (updatedArticle.published) {
+      console.log('updating tokens to users..')
       let currTokens = 0;
       let finalTokens = 0;
       currTokens = user.tokens;
@@ -305,6 +310,8 @@ const updateArticle = authWrapper(async (req, res) => {
         { new: true }
       );
     }
+
+  
 
     res.status(201).json({ updatedArticle });
   } catch (error) {
